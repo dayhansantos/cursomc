@@ -17,7 +17,7 @@ public class CategoriaService {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Optional<Categoria> buscar(Integer id){
+    public Optional<Categoria> buscar(Integer id) {
         return categoriaRepository.findById(id);
     }
 }

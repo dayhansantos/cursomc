@@ -23,7 +23,7 @@ public class CategoriaResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Categoria> findById(@PathVariable Integer id){
+    public ResponseEntity<Categoria> findById(@PathVariable Integer id) {
         return categoriaService.buscar(id)
                 .map(categoria -> ResponseEntity.ok().body(categoria))
                 .orElse(ResponseEntity.notFound().build());
