@@ -1,5 +1,7 @@
 package br.com.dayhan.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class Categoria implements Serializable {
     private String nome;
 
     @ManyToMany(mappedBy = "categorias")
+    //Informa que esta classe retornará a lista de produtos vinculados a ela. Impede a referência circular
+    @JsonManagedReference
     private List<Produto> produtos = new ArrayList<>();
 
     public Categoria() {
