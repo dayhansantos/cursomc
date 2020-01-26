@@ -39,21 +39,32 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "TELEFONE")
     private Set<String> telefones = new HashSet<>();
 
+    @OneToMany(mappedBy = "cliente")
+    private List<Pedido> pedidos = new ArrayList<>();
+
     public Cliente() {
     }
 
-    public Cliente(String nome, String email, String cpfCnpj, TipoCliente tipo) {
+    public Cliente(final String nome, final String email, final String cpfCnpj, final TipoCliente tipo) {
         this.nome = nome;
         this.email = email;
         this.cpfCnpj = cpfCnpj;
         this.tipo = tipo.getCod();
     }
 
+    public List<Pedido> getPedidos() {
+        return this.pedidos;
+    }
+
+    public void setPedidos(final List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -61,7 +72,7 @@ public class Cliente implements Serializable {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(final String nome) {
         this.nome = nome;
     }
 
@@ -69,7 +80,7 @@ public class Cliente implements Serializable {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -77,7 +88,7 @@ public class Cliente implements Serializable {
         return cpfCnpj;
     }
 
-    public void setCpfCnpj(String cpfCnpj) {
+    public void setCpfCnpj(final String cpfCnpj) {
         this.cpfCnpj = cpfCnpj;
     }
 
@@ -85,17 +96,17 @@ public class Cliente implements Serializable {
         return TipoCliente.toEnum(tipo);
     }
 
-    public void setTipo(TipoCliente tipo) {
+    public void setTipo(final TipoCliente tipo) {
         this.tipo = tipo.getCod();
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        Cliente cliente = (Cliente) o;
+        final Cliente cliente = (Cliente) o;
         return id.equals(cliente.id);
     }
 
@@ -108,7 +119,7 @@ public class Cliente implements Serializable {
         return enderecos;
     }
 
-    public void setEnderecos(List<Endereco> enderecos) {
+    public void setEnderecos(final List<Endereco> enderecos) {
         this.enderecos = enderecos;
     }
 
@@ -116,7 +127,7 @@ public class Cliente implements Serializable {
         return telefones;
     }
 
-    public void setTelefones(Set<String> telefones) {
+    public void setTelefones(final Set<String> telefones) {
         this.telefones = telefones;
     }
 }
