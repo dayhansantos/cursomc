@@ -23,11 +23,9 @@ public class Categoria implements Serializable {
     @JsonManagedReference
     private List<Produto> produtos = new ArrayList<>();
 
-    public Categoria() {
-    }
+    public Categoria() {}
 
     public Categoria(String nome) {
-        this.id = id;
         this.nome = nome;
     }
 
