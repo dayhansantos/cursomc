@@ -16,6 +16,6 @@ public class PedidoService {
 	public Pedido buscar(Integer id) {
 		return this.pedidoRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException(
-						"Objeto não encontrado: " + id + ", Tipo: " + Pedido.class.getName()));
+						"Objeto não encontrado: " + id + ", Tipo: " + Pedido.class.getSimpleName()));
 	}
 }
