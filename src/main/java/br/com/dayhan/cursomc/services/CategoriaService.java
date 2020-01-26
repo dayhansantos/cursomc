@@ -18,8 +18,12 @@ public class CategoriaService {
     }
 
     public Categoria buscar(Integer id) {
-        return categoriaRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: "
-						+ Categoria.class.getSimpleName()));
+        return categoriaRepository.findById(id).orElseThrow(() -> new NotFoundException(
+                "Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getSimpleName()));
+    }
+
+    public Categoria insert(Categoria categoria) {
+        categoria.setId(null);
+        return categoriaRepository.save(categoria);
     }
 }
