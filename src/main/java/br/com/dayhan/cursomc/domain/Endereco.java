@@ -1,13 +1,21 @@
 package br.com.dayhan.cursomc.domain;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Endereco implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -17,6 +25,7 @@ public class Endereco implements Serializable {
     private String bairro;
     private String cep;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
@@ -33,9 +42,11 @@ public class Endereco implements Serializable {
         this.cliente = cliente;
     }
 
-    public Endereco(){}
+    public Endereco() {
+    }
 
-    public Endereco(String logradouro, String numero, String complemento, String bairro, String cep, Cliente cliente, Cidade cidade) {
+    public Endereco(String logradouro, String numero, String complemento, String bairro, String cep, Cliente cliente,
+            Cidade cidade) {
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
@@ -47,8 +58,10 @@ public class Endereco implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Endereco endereco = (Endereco) o;
         return id.equals(endereco.id);
     }
