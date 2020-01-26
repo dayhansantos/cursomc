@@ -1,13 +1,23 @@
 package br.com.dayhan.cursomc.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringJoiner;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Produto implements Serializable {
@@ -21,14 +31,13 @@ public class Produto implements Serializable {
     private Double preco;
 
     @ManyToMany
-    @JoinTable(
-            name = "PRODUTO_CATEGORIA",
-            joinColumns = @JoinColumn(name = "produto_id"),
-            inverseJoinColumns = @JoinColumn(name = "categoria_id")
-    )
-    //Informa que a referência já foi chamada na outra classe
+    @JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    // Informa que a referência já foi chamada na outra classe
     @JsonBackReference
     private List<Categoria> categorias = new ArrayList<>();
+
+    @OneToMany(mappedBy = "id.produto")
+    private Set<ItemPedido> itens = new HashSet<>();
 
     public Produto() {
     }
@@ -36,6 +45,14 @@ public class Produto implements Serializable {
     public Produto(String nome, Double preco) {
         this.nome = nome;
         this.preco = preco;
+    }
+
+    public List<Pedido> getPedidos() {
+        List<Pedido> lista = new ArrayList<>();
+        for (ItemPedido o : this.itens) {
+            lista.add(o.getPedido());
+        }
+        return lista;
     }
 
     public Integer getId() {
@@ -70,19 +87,26 @@ public class Produto implements Serializable {
         this.categorias = categorias;
     }
 
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
+    }
+
     @Override
     public String toString() {
-        return new StringJoiner(", ", Produto.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("nome='" + nome + "'")
-                .add("preco=" + preco)
-                .toString();
+        return new StringJoiner(", ", Produto.class.getSimpleName() + "[", "]").add("id=" + id)
+                .add("nome='" + nome + "'").add("preco=" + preco).toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Produto produto = (Produto) o;
         return Objects.equals(id, produto.id);
     }
