@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
 
 /**
@@ -20,13 +22,13 @@ import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
 public abstract class Pagamento {
 
     @Id
-
     private Integer id;
     private Integer estado;
 
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId // Garante que o ID do pedido será o mesmo que o ID de pagamento
+	@JsonBackReference
     private Pedido pedido;
 
     public Pagamento() {

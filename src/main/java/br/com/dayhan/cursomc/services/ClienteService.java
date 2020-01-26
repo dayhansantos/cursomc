@@ -10,11 +10,11 @@ import br.com.dayhan.cursomc.repositories.ClienteRepository;
 @Service
 public class ClienteService {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
 
-    public Cliente buscar(Integer id) {
-        return clienteRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
-    }
+	public Cliente buscar(Integer id) {
+		return clienteRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+	}
 }
