@@ -29,17 +29,14 @@ public class ClienteService {
 	}
 
 	public Cliente update(ClienteDTO obj) {
-    	Cliente cliente = this.getFromDTO(obj);
-    	Cliente clienteOld = this.find(cliente.getId());
-    	
-    	updateDate(cliente, clienteOld);
-    	
-        return clienteRepository.save(clienteOld);
+    	Cliente newObj = this.find(obj.getId());
+    	updateData(newObj, obj);
+        return clienteRepository.save(newObj);
     }
 
-    private void updateDate(Cliente cliente, Cliente clienteOld) {
-    	clienteOld.setNome(cliente.getNome());
-    	clienteOld.setEmail(cliente.getEmail());
+    private void updateData(Cliente cliente, ClienteDTO obj) {
+    	cliente.setNome(obj.getNome());
+    	cliente.setEmail(obj.getEmail());
 	}
 
 	public void delete(Integer id) {

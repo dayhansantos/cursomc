@@ -19,12 +19,8 @@ import br.com.dayhan.cursomc.repositories.CategoriaRepository;
 @Service
 public class CategoriaService {
 
-    private final CategoriaRepository categoriaRepository;
-
-    @Autowired
-    public CategoriaService(CategoriaRepository categoriaRepository) {
-        this.categoriaRepository = categoriaRepository;
-    }
+	@Autowired
+    private CategoriaRepository categoriaRepository;
 
     public Categoria find(Integer id) {
         return categoriaRepository.findById(id).orElseThrow(() -> new NotFoundException(
@@ -38,10 +34,14 @@ public class CategoriaService {
     }
 
     public Categoria update(CategoriaDTO obj) {
-    	Categoria categoria = this.getFromDTO(obj);
-        this.find(categoria.getId());
-        return categoriaRepository.save(categoria);
+    	Categoria newObj = this.find(obj.getId());
+    	updateData(newObj, obj);
+        return categoriaRepository.save(newObj);
     }
+
+    private void updateData(Categoria newObj, CategoriaDTO obj) {
+    	newObj.setNome(obj.getNome());
+	}
 
     public void delete(Integer id) {
         this.find(id);
