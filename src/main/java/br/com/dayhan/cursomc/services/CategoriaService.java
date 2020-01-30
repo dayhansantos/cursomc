@@ -31,14 +31,16 @@ public class CategoriaService {
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getSimpleName()));
     }
 
-    public Categoria insert(Categoria categoria) {
-        categoria.setId(null);
+    public Categoria insert(CategoriaDTO categoriaDTO) {
+    	Categoria categoria = this.getFromDTO(categoriaDTO);
+    	categoria.setId(null);
         return categoriaRepository.save(categoria);
     }
 
-    public Categoria update(Categoria obj) {
-        this.find(obj.getId());
-        return categoriaRepository.save(obj);
+    public Categoria update(CategoriaDTO obj) {
+    	Categoria categoria = this.getFromDTO(obj);
+        this.find(categoria.getId());
+        return categoriaRepository.save(categoria);
     }
 
     public void delete(Integer id) {
@@ -68,5 +70,9 @@ public class CategoriaService {
 	public Page<CategoriaDTO> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return categoriaRepository.findAll(pageRequest).map(c -> new CategoriaDTO(c));
+	}
+	
+	public Categoria getFromDTO(CategoriaDTO categoriaDTO) {
+		return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
 	}
 }

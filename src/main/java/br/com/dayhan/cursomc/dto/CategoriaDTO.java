@@ -1,9 +1,16 @@
 package br.com.dayhan.cursomc.dto;
 
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 import br.com.dayhan.cursomc.domain.Categoria;
 
 public class CategoriaDTO {
 	private Integer id;
+	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min = 5, max = 80, message = "O tamanho deve ser entre {min} e {max} caracteres")
 	private String nome;
 
 	public CategoriaDTO() {
