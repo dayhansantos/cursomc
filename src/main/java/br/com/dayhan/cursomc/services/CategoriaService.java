@@ -1,10 +1,14 @@
 package br.com.dayhan.cursomc.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.dayhan.cursomc.domain.Categoria;
+import br.com.dayhan.cursomc.dto.CategoriaDTO;
 import br.com.dayhan.cursomc.exception.DataIntegrityException;
 import br.com.dayhan.cursomc.exception.NotFoundException;
 import br.com.dayhan.cursomc.repositories.CategoriaRepository;
@@ -42,4 +46,11 @@ public class CategoriaService {
             throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos");
         }
     }
+
+	public List<CategoriaDTO> findAll() {
+		List<Categoria> categorias = this.categoriaRepository.findAll();
+		return categorias.stream()
+				.map(c -> new CategoriaDTO(c))
+				.collect(Collectors.toList());
+	}
 }

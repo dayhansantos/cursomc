@@ -1,6 +1,7 @@
 package br.com.dayhan.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.dayhan.cursomc.domain.Categoria;
+import br.com.dayhan.cursomc.dto.CategoriaDTO;
 import br.com.dayhan.cursomc.services.CategoriaService;
 
 @RestController
@@ -48,5 +50,11 @@ public class CategoriaResource {
         categoriaService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+	@GetMapping
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		final List<CategoriaDTO> categorias = categoriaService.findAll();
+		return ResponseEntity.ok(categorias);
+	}
 
 }
