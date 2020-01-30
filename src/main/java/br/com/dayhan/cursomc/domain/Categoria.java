@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +22,7 @@ public class Categoria implements Serializable {
     private Integer id;
     private String nome;
 
-    @ManyToMany(mappedBy = "categorias")
+    @ManyToMany(mappedBy = "categorias", cascade = CascadeType.PERSIST)
     //Informa que esta classe retornará a lista de produtos vinculados a ela. Impede a referência circular
     private List<Produto> produtos = new ArrayList<>();
 
@@ -72,5 +73,12 @@ public class Categoria implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, nome);
+    }
+    
+    public void addProduto(final Produto ...produtos) {
+    	for (Produto produto : produtos) {
+    		produto.getCategorias().add(this);
+    		this.produtos.add(produto);
+		}
     }
 }

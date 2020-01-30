@@ -9,9 +9,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import br.com.dayhan.cursomc.domain.Cidade;
 import br.com.dayhan.cursomc.domain.Cliente;
+import br.com.dayhan.cursomc.domain.Endereco;
+import br.com.dayhan.cursomc.domain.enums.TipoCliente;
 import br.com.dayhan.cursomc.dto.ClienteDTO;
+import br.com.dayhan.cursomc.dto.ClienteNewDTO;
 import br.com.dayhan.cursomc.exception.DataIntegrityException;
 import br.com.dayhan.cursomc.exception.NotFoundException;
 import br.com.dayhan.cursomc.repositories.ClienteRepository;
@@ -71,4 +76,19 @@ public class ClienteService {
 	public Cliente getFromDTO(ClienteDTO clienteDTO) {
 		return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail(), null, null);
 	}
+	
+	public Cliente getFromDTO(ClienteNewDTO objDTO) {
+		Cliente cliente = new Cliente(null, objDTO.getNome(), objDTO.getEmail(), objDTO.getCpfCnpj(), TipoCliente.toEnum(objDTO.getTipo()));
+		Cidade cidade = new Cidade(objDTO.getCidadeId(), null, null);
+		Endereco endereco = new Endereco(objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(), objDTO.getBairro(), objDTO.getCep(), cidade);
+		cliente.addEndereco(endereco);
+		cliente.setTelefones(objDTO.getTelefones());
+		return cliente;
+	}
+
+	@Transactional
+	public Cliente insert(ClienteNewDTO obj) {
+    	Cliente cliente = this.getFromDTO(obj);
+        return clienteRepository.save(cliente);
+    }
 }

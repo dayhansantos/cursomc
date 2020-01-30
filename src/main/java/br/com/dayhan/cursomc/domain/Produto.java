@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,7 +37,7 @@ public class Produto implements Serializable {
 	@JsonIgnore
     private List<Categoria> categorias = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id.produto")
+    @OneToMany(mappedBy = "id.produto", cascade = CascadeType.PERSIST)
 	@JsonIgnore
     private Set<ItemPedido> itens = new HashSet<>();
 
@@ -116,5 +117,12 @@ public class Produto implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+    
+    public void addItemPedido(final ItemPedido ...itemPedidos) {
+    	for (ItemPedido itemPedido : itemPedidos) {
+    		itemPedido.getId().setProduto(this);
+    		this.itens.add(itemPedido);
+		}
     }
 }

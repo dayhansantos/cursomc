@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +23,7 @@ public class Estado implements Serializable {
     private String nome;
 
 	@JsonIgnore
-    @OneToMany(mappedBy = "estado")
+    @OneToMany(mappedBy = "estado", cascade = CascadeType.PERSIST)
     private List<Cidade> cidades = new ArrayList<>();
 
     public Estado() {
@@ -71,5 +72,12 @@ public class Estado implements Serializable {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+    
+    public void addCidade(final Cidade ...cidades) {
+    	for (Cidade cidade : cidades) {
+    		cidade.setEstado(this);
+    		this.cidades.add(cidade);
+		}
     }
 }

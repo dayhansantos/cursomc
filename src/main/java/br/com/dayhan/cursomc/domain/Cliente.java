@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -31,14 +32,14 @@ public class Cliente implements Serializable {
     private String cpfCnpj;
     private Integer tipo;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
     private List<Endereco> enderecos = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "TELEFONE")
     private Set<String> telefones = new HashSet<>();
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
 	@JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();
 
@@ -130,5 +131,26 @@ public class Cliente implements Serializable {
 
     public void setTelefones(final Set<String> telefones) {
         this.telefones = telefones;
+    }
+    
+    public void addEndereco(final Endereco ...enderecos) {
+    	for (Endereco endereco : enderecos) {
+    		endereco.setCliente(this);
+    		this.enderecos.add(endereco);
+		}
+    }
+    
+    public void addPedido(final Pedido ...pedidos) {
+    	for (Pedido pedido : pedidos) {
+    		pedido.setCliente(this);
+    		this.pedidos.add(pedido);
+		}
+    }
+    
+    public void addTelefone(String ...telefones) {
+    	for (String telefone : telefones) {
+    		this.telefones.add(telefone);
+			
+		}
     }
 }

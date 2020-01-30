@@ -38,16 +38,15 @@ public class Pedido {
     @JoinColumn(name = "endereco_de_entrega_id")
     private Endereco enderecoDeEntrega;
 
-    @OneToMany(mappedBy = "id.pedido")
+    @OneToMany(mappedBy = "id.pedido", cascade = CascadeType.PERSIST)
     private Set<ItemPedido> itens = new HashSet<>();
 
     public Pedido() {
     }
 
-    public Pedido(final Integer id, final Date instante, final Cliente cliente, final Endereco enderecoDeEntrega) {
+    public Pedido(final Integer id, final Date instante, final Endereco enderecoDeEntrega) {
         this.id = id;
         this.instante = instante;
-        this.cliente = cliente;
         this.enderecoDeEntrega = enderecoDeEntrega;
     }
 
@@ -120,6 +119,13 @@ public class Pedido {
         return "{" + " id='" + getId() + "'" + ", instante='" + getInstante() + "'" + ", pagamento='" + getPagamento()
                 + "'" + ", cliente='" + getCliente() + "'" + ", enderecoDeEntrega='" + getEnderecoDeEntrega() + "'"
                 + "}";
+    }
+    
+    public void addItemPedido(final ItemPedido ...itemPedidos) {
+    	for (ItemPedido itemPedido : itemPedidos) {
+    		itemPedido.getId().setPedido(this);
+    		this.itens.add(itemPedido);
+		}
     }
 
 }
