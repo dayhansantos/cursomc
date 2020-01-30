@@ -73,6 +73,4 @@ public class CategoriaResource {
 		final Page<CategoriaDTO> categorias = categoriaService.findPage(page, linesPerPage, orderBy, direction);
 		return ResponseEntity.ok(categorias);
 	}
-	
-
 }
