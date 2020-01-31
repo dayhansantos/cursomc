@@ -52,12 +52,25 @@ public class CursomcApplication implements CommandLineRunner {
         final Categoria cat6 = new Categoria("Decoração");
         final Categoria cat7 = new Categoria("Perfumaria");
 
-        final Produto p1 = new Produto("Computador", 2000.0);
-        final Produto p2 = new Produto("Impressora", 800.0);
-        final Produto p3 = new Produto("Mouse", 80.0);
+        final Produto p1 	= new Produto("Computador", 2000.0);
+        final Produto p2 	= new Produto("Impressora", 800.0);
+        final Produto p3 	= new Produto("Mouse", 80.0);
+        final Produto p4 	= new Produto("Mesa de escritório", 300.0);
+        final Produto p5 	= new Produto("Toalha", 50.0);
+        final Produto p6 	= new Produto("Colcha", 200.0);
+        final Produto p7 	= new Produto("TV true color", 1200.0);
+        final Produto p8 	= new Produto("Roçadeira", 800.0);
+        final Produto p9 	= new Produto("Abajour", 100.0);
+        final Produto p10 	= new Produto("Pendente", 180.0);
+        final Produto p11 	= new Produto("Shampoo", 90.0);
 
         cat1.addProduto(p1, p2, p3);
-        cat2.addProduto(p2);
+        cat2.addProduto(p2, p4);
+        cat3.addProduto(p5, p6);
+        cat4.addProduto(p1, p2, p3, p7);
+        cat5.addProduto(p8);
+        cat6.addProduto(p9, p10);
+        cat7.addProduto(p11);
 
         categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 
