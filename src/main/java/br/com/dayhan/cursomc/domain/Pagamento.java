@@ -1,26 +1,20 @@
 package br.com.dayhan.cursomc.domain;
 
-import java.util.Objects;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-
+import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Pagamento
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Pagamento {
+public abstract class Pagamento implements Serializable {
 
+    private static final long serialVersionUID = -1064927646315614941L;
     @Id
     private Integer id;
     private Integer estado;

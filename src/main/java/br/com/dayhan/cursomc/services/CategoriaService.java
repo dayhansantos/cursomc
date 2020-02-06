@@ -1,8 +1,10 @@
 package br.com.dayhan.cursomc.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import br.com.dayhan.cursomc.domain.Categoria;
+import br.com.dayhan.cursomc.dto.CategoriaDTO;
+import br.com.dayhan.cursomc.exception.DataIntegrityException;
+import br.com.dayhan.cursomc.exception.NotFoundException;
+import br.com.dayhan.cursomc.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -10,37 +12,38 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import br.com.dayhan.cursomc.domain.Categoria;
-import br.com.dayhan.cursomc.dto.CategoriaDTO;
-import br.com.dayhan.cursomc.exception.DataIntegrityException;
-import br.com.dayhan.cursomc.exception.NotFoundException;
-import br.com.dayhan.cursomc.repositories.CategoriaRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoriaService {
 
-	@Autowired
-    private CategoriaRepository categoriaRepository;
+	private CategoriaRepository categoriaRepository;
 
-    public Categoria find(Integer id) {
+	@Autowired
+	public CategoriaService(CategoriaRepository categoriaRepository) {
+		this.categoriaRepository = categoriaRepository;
+	}
+
+	public Categoria find(Integer id) {
         return categoriaRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getSimpleName()));
     }
 
     public Categoria insert(CategoriaDTO categoriaDTO) {
-    	Categoria categoria = this.getFromDTO(categoriaDTO);
+    	var categoria = this.getFromDTO(categoriaDTO);
     	categoria.setId(null);
         return categoriaRepository.save(categoria);
     }
 
-    public Categoria update(CategoriaDTO obj) {
-    	Categoria newObj = this.find(obj.getId());
+    public void update(CategoriaDTO obj) {
+    	var newObj = this.find(obj.getId());
     	updateData(newObj, obj);
-        return categoriaRepository.save(newObj);
-    }
+		categoriaRepository.save(newObj);
+	}
 
     private void updateData(Categoria newObj, CategoriaDTO obj) {
-    	newObj.setNome(obj.getNome());
+		newObj.setNome(obj.getNome());
 	}
 
     public void delete(Integer id) {
@@ -53,23 +56,23 @@ public class CategoriaService {
     }
 
 	public List<CategoriaDTO> findAll() {
-		List<Categoria> categorias = this.categoriaRepository.findAll();
+		var categorias = this.categoriaRepository.findAll();
 		return categorias.stream()
-				.map(c -> new CategoriaDTO(c))
+				.map(CategoriaDTO::new)
 				.collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * Retorna uma lista paginada
-	 * @param page
-	 * @param linesPerPage
-	 * @param orderBy
-	 * @param direction
-	 * @return
+	 * @param page Numero da pagina que será consultada
+	 * @param linesPerPage Quantidade de registros por página
+	 * @param orderBy Nome do campo que será usado para ordenação
+	 * @param direction Direção da ordenação, podendo ser ASC ou DESC
+	 * @return uma lista de clientes paginada
 	 */
 	public Page<CategoriaDTO> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		return categoriaRepository.findAll(pageRequest).map(c -> new CategoriaDTO(c));
+		var pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return categoriaRepository.findAll(pageRequest).map(CategoriaDTO::new);
 	}
 	
 	public Categoria getFromDTO(CategoriaDTO categoriaDTO) {

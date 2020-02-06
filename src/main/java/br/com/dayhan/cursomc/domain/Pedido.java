@@ -1,24 +1,17 @@
 package br.com.dayhan.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
-public class Pedido {
+public class Pedido implements Serializable {
+    private static final long serialVersionUID = -5382998819212780618L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,13 +42,13 @@ public class Pedido {
         this.instante = instante;
         this.enderecoDeEntrega = enderecoDeEntrega;
     }
-    
+
     public double getValorTotal() {
     	double soma = 0.0;
     	for (ItemPedido itemPedido : itens) {
 			soma += itemPedido.getSubTotal();
 		}
-    	
+
     	return soma;
     }
 
@@ -129,7 +122,7 @@ public class Pedido {
                 + "'" + ", cliente='" + getCliente() + "'" + ", enderecoDeEntrega='" + getEnderecoDeEntrega() + "'"
                 + "}";
     }
-    
+
     public void addItemPedido(final ItemPedido ...itemPedidos) {
     	for (ItemPedido itemPedido : itemPedidos) {
     		itemPedido.getId().setPedido(this);

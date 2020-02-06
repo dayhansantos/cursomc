@@ -1,12 +1,11 @@
 package br.com.dayhan.cursomc.domain;
 
-import java.util.Date;
-
-import javax.persistence.Entity;
-
+import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
+import javax.persistence.Entity;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * PagamentoComBoleto
@@ -14,7 +13,9 @@ import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
 @Entity
 public class PagamentoComBoleto extends Pagamento {
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
+    private static final long serialVersionUID = 8820675495157014999L;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataVencimento;
 
 	@JsonFormat(pattern = "dd/MM/yyyy")
@@ -52,4 +53,18 @@ public class PagamentoComBoleto extends Pagamento {
                 + "}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PagamentoComBoleto)) return false;
+        if (!super.equals(o)) return false;
+        PagamentoComBoleto that = (PagamentoComBoleto) o;
+        return Objects.equals(dataVencimento, that.dataVencimento) &&
+                Objects.equals(dataPagamento, that.dataPagamento);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), dataVencimento, dataPagamento);
+    }
 }

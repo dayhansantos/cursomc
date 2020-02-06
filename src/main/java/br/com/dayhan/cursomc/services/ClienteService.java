@@ -1,16 +1,5 @@
 package br.com.dayhan.cursomc.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import br.com.dayhan.cursomc.domain.Cidade;
 import br.com.dayhan.cursomc.domain.Cliente;
 import br.com.dayhan.cursomc.domain.Endereco;
@@ -20,6 +9,16 @@ import br.com.dayhan.cursomc.dto.ClienteNewDTO;
 import br.com.dayhan.cursomc.exception.DataIntegrityException;
 import br.com.dayhan.cursomc.exception.NotFoundException;
 import br.com.dayhan.cursomc.repositories.ClienteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
@@ -33,11 +32,11 @@ public class ClienteService {
 						"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getSimpleName()));
 	}
 
-	public Cliente update(ClienteDTO obj) {
-    	Cliente newObj = this.find(obj.getId());
+	public void update(ClienteDTO obj) {
+    	var newObj = this.find(obj.getId());
     	updateData(newObj, obj);
-        return clienteRepository.save(newObj);
-    }
+		clienteRepository.save(newObj);
+	}
 
     private void updateData(Cliente cliente, ClienteDTO obj) {
     	cliente.setNome(obj.getNome());
@@ -54,33 +53,29 @@ public class ClienteService {
     }
 
 	public List<ClienteDTO> findAll() {
-		List<Cliente> clientes = this.clienteRepository.findAll();
+		var clientes = this.clienteRepository.findAll();
 		return clientes.stream()
-				.map(c -> new ClienteDTO(c))
+				.map(ClienteDTO::new)
 				.collect(Collectors.toList());
 	}
 	
 	/**
 	 * Retorna uma lista paginada
-	 * @param page
-	 * @param linesPerPage
-	 * @param orderBy
-	 * @param direction
+	 * @param page Numero da pagina que será consultada
+	 * @param linesPerPage Quantidade de registros por página
+	 * @param orderBy Nome do campo que será usado para ordenação
+	 * @param direction Direção da ordenação, podendo ser ASC ou DESC
 	 * @return uma lista de clientes paginada
 	 */
 	public Page<ClienteDTO> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		return clienteRepository.findAll(pageRequest).map(c -> new ClienteDTO(c));
-	}
-	
-	public Cliente getFromDTO(ClienteDTO clienteDTO) {
-		return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail(), null, null);
+		return clienteRepository.findAll(pageRequest).map(ClienteDTO::new);
 	}
 	
 	public Cliente getFromDTO(ClienteNewDTO objDTO) {
-		Cliente cliente = new Cliente(null, objDTO.getNome(), objDTO.getEmail(), objDTO.getCpfCnpj(), TipoCliente.toEnum(objDTO.getTipo()));
-		Cidade cidade = new Cidade(objDTO.getCidadeId(), null, null);
-		Endereco endereco = new Endereco(objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(), objDTO.getBairro(), objDTO.getCep(), cidade);
+		var cliente = new Cliente(null, objDTO.getNome(), objDTO.getEmail(), objDTO.getCpfCnpj(), TipoCliente.toEnum(objDTO.getTipo()));
+		var cidade = new Cidade(objDTO.getCidadeId(), null, null);
+		var endereco = new Endereco(objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(), objDTO.getBairro(), objDTO.getCep(), cidade);
 		cliente.addEndereco(endereco);
 		cliente.setTelefones(objDTO.getTelefones());
 		return cliente;
@@ -88,7 +83,7 @@ public class ClienteService {
 
 	@Transactional
 	public Cliente insert(ClienteNewDTO obj) {
-    	Cliente cliente = this.getFromDTO(obj);
+    	var cliente = this.getFromDTO(obj);
         return clienteRepository.save(cliente);
     }
 }
