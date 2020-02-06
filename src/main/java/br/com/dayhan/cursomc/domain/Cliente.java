@@ -1,27 +1,19 @@
 package br.com.dayhan.cursomc.domain;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import br.com.dayhan.cursomc.domain.enums.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(exclude = {"enderecos", "telefones", "pedidos"})
 public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -46,55 +38,12 @@ public class Cliente implements Serializable {
 	@JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();
 
-    public Cliente() {
-    }
-
     public Cliente(final Integer id, final String nome, final String email, final String cpfCnpj, final TipoCliente tipo) {
     	this.id = id;
         this.nome = nome;
         this.email = email;
         this.cpfCnpj = cpfCnpj;
         this.tipo = (tipo == null) ? null : tipo.getCod();
-    }
-
-    public List<Pedido> getPedidos() {
-        return this.pedidos;
-    }
-
-    public void setPedidos(final List<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(final Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(final String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
-    public String getCpfCnpj() {
-        return cpfCnpj;
-    }
-
-    public void setCpfCnpj(final String cpfCnpj) {
-        this.cpfCnpj = cpfCnpj;
     }
 
     public TipoCliente getTipo() {
@@ -105,37 +54,6 @@ public class Cliente implements Serializable {
         this.tipo = tipo.getCod();
     }
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        final Cliente cliente = (Cliente) o;
-        return id.equals(cliente.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public List<Endereco> getEnderecos() {
-        return enderecos;
-    }
-
-    public void setEnderecos(final List<Endereco> enderecos) {
-        this.enderecos = enderecos;
-    }
-
-    public Set<String> getTelefones() {
-        return telefones;
-    }
-
-    public void setTelefones(final Set<String> telefones) {
-        this.telefones = telefones;
-    }
-    
     public void addEndereco(final Endereco ...enderecos) {
     	for (Endereco endereco : enderecos) {
     		endereco.setCliente(this);
@@ -151,9 +69,6 @@ public class Cliente implements Serializable {
     }
     
     public void addTelefone(String ...telefones) {
-    	for (String telefone : telefones) {
-    		this.telefones.add(telefone);
-			
-		}
+        Collections.addAll(this.telefones, telefones);
     }
 }

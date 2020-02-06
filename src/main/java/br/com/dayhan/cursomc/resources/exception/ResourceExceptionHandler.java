@@ -1,9 +1,7 @@
 package br.com.dayhan.cursomc.resources.exception;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import br.com.dayhan.cursomc.exception.DataIntegrityException;
+import br.com.dayhan.cursomc.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -11,8 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import br.com.dayhan.cursomc.exception.DataIntegrityException;
-import br.com.dayhan.cursomc.exception.NotFoundException;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -36,8 +34,7 @@ public class ResourceExceptionHandler {
                 System.currentTimeMillis());
         
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
-        fieldErrors.stream()
-        	.forEach(fieldError -> err.addError(fieldError.getField(), fieldError.getDefaultMessage()));
+        fieldErrors.forEach(fieldError -> err.addError(fieldError.getField(), fieldError.getDefaultMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 }

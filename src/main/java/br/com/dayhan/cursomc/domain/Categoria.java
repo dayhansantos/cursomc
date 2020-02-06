@@ -1,18 +1,18 @@
 package br.com.dayhan.cursomc.domain;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(exclude = "produtos")
 public class Categoria implements Serializable {
 
     private static final long serialVersionUID = -590464393390842220L;
@@ -23,10 +23,7 @@ public class Categoria implements Serializable {
     private String nome;
 
     @ManyToMany(mappedBy = "categorias", cascade = CascadeType.PERSIST)
-    //Informa que esta classe retornará a lista de produtos vinculados a ela. Impede a referência circular
     private List<Produto> produtos = new ArrayList<>();
-
-    public Categoria() {}
 
     public Categoria(String nome) {
         this.nome = nome;
@@ -37,44 +34,6 @@ public class Categoria implements Serializable {
     	this.id = id;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Categoria categoria = (Categoria) o;
-        return id.equals(categoria.id) &&
-                nome.equals(categoria.nome);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nome);
-    }
-    
     public void addProduto(final Produto ...produtos) {
     	for (Produto produto : produtos) {
     		produto.getCategorias().add(this);

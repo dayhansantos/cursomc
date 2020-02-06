@@ -1,16 +1,19 @@
 package br.com.dayhan.cursomc.domain;
 
-import java.io.Serializable;
-import java.util.Objects;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.io.Serializable;
 
 /**
  * ItemPedidoPK
  */
 @Embeddable
+@Data
+@NoArgsConstructor
 public class ItemPedidoPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,37 +25,4 @@ public class ItemPedidoPK implements Serializable {
     @ManyToOne
     @JoinColumn(name = "produto_id")
     private Produto produto;
-
-    public Pedido getPedido() {
-        return this.pedido;
-    }
-
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
-    }
-
-    public Produto getProduto() {
-        return this.produto;
-    }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ItemPedidoPK)) {
-            return false;
-        }
-        ItemPedidoPK itemPedidoPK = (ItemPedidoPK) o;
-        return Objects.equals(pedido, itemPedidoPK.pedido) && Objects.equals(produto, itemPedidoPK.produto);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(pedido, produto);
-    }
-
 }

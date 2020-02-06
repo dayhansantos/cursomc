@@ -1,26 +1,21 @@
 package br.com.dayhan.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import java.util.StringJoiner;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Produto implements Serializable {
 
     private static final long serialVersionUID = 4446285086533085607L;
@@ -33,16 +28,12 @@ public class Produto implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    // Informa que a referência já foi chamada na outra classe
 	@JsonIgnore
     private List<Categoria> categorias = new ArrayList<>();
 
     @OneToMany(mappedBy = "id.produto", cascade = CascadeType.PERSIST)
 	@JsonIgnore
     private Set<ItemPedido> itens = new HashSet<>();
-
-    public Produto() {
-    }
 
     public Produto(String nome, Double preco) {
         this.nome = nome;
@@ -58,67 +49,6 @@ public class Produto implements Serializable {
         return lista;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(Double preco) {
-        this.preco = preco;
-    }
-
-    public List<Categoria> getCategorias() {
-        return categorias;
-    }
-
-    public void setCategorias(List<Categoria> categorias) {
-        this.categorias = categorias;
-    }
-
-    public Set<ItemPedido> getItens() {
-        return itens;
-    }
-
-    public void setItens(Set<ItemPedido> itens) {
-        this.itens = itens;
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", Produto.class.getSimpleName() + "[", "]").add("id=" + id)
-                .add("nome='" + nome + "'").add("preco=" + preco).toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Produto produto = (Produto) o;
-        return Objects.equals(id, produto.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-    
     public void addItemPedido(final ItemPedido ...itemPedidos) {
     	for (ItemPedido itemPedido : itemPedidos) {
     		itemPedido.getId().setProduto(this);
