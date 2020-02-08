@@ -1,9 +1,8 @@
 package br.com.dayhan.cursomc.repositories;
 
+import br.com.dayhan.cursomc.domain.Pagamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import br.com.dayhan.cursomc.domain.Pagamento;
 
 /**
  * PagamentoRepository

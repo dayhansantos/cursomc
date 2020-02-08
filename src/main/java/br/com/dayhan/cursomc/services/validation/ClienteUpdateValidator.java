@@ -1,20 +1,18 @@
 package br.com.dayhan.cursomc.services.validation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.HandlerMapping;
-
 import br.com.dayhan.cursomc.domain.Cliente;
 import br.com.dayhan.cursomc.dto.ClienteDTO;
 import br.com.dayhan.cursomc.repositories.ClienteRepository;
 import br.com.dayhan.cursomc.resources.exception.FieldMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.HandlerMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate, ClienteDTO> {
 	
