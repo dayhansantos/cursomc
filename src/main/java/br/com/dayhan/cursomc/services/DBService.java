@@ -75,7 +75,7 @@ public class DBService {
 
         estadoRepository.saveAll(Arrays.asList(est1, est2));
 
-        var cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PF);
+        var cli1 = new Cliente(null, "Dayhan Henrique", "dayhan.santos@gmail.com", "36378912377", TipoCliente.PF);
         cli1.addTelefone("123456789", "1122334455");
 
         var e1 = new Endereco("Rua flores", "300", "Apt 303", "Jardim", "234234234", c1);
