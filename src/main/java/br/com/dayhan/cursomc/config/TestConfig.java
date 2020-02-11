@@ -1,6 +1,8 @@
 package br.com.dayhan.cursomc.config;
 
 import br.com.dayhan.cursomc.services.DBService;
+import br.com.dayhan.cursomc.services.EmailService;
+import br.com.dayhan.cursomc.services.MockEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,5 +18,10 @@ public class TestConfig {
     @Bean
     public boolean instanciateDatabase() throws Exception {
         return this.dbService.instantiateDatabase() != null;
+    }
+
+    @Bean
+    public EmailService emailService() {
+        return new MockEmailService();
     }
 }

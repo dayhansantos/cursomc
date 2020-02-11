@@ -27,6 +27,9 @@ public class PedidoService {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private EmailService emailService;
+
     public Pedido find(Integer id) {
         return this.pedidoRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "Objeto não encontrado: " + id + ", Tipo: " + Pedido.class.getSimpleName()));
@@ -42,11 +45,9 @@ public class PedidoService {
             PagamentoComBoleto pagto = (PagamentoComBoleto) obj.getPagamento();
             boletoService.preencherPagamentoComBoleto(pagto, obj.getInstante());
         }
-
         obj.getItens().forEach(i -> getItemPedido(i, obj));
-        var save = pedidoRepository.save(obj);
-        System.out.println("save = " + save);
-        return save;
+        emailService.sendOrderConfirmationEmail(obj);
+        return pedidoRepository.save(obj);
     }
 
     private void getItemPedido(ItemPedido itemPedido, Pedido pedido) {
