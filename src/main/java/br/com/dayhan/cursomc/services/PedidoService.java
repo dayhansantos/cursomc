@@ -46,7 +46,7 @@ public class PedidoService {
             boletoService.preencherPagamentoComBoleto(pagto, obj.getInstante());
         }
         obj.getItens().forEach(i -> getItemPedido(i, obj));
-        emailService.sendOrderConfirmationEmail(obj);
+        emailService.sendOrderConfirmationHtmlEmail(obj);
         return pedidoRepository.save(obj);
     }
 
