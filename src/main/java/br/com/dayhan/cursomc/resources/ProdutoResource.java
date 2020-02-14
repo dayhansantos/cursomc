@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,12 @@ public class ProdutoResource {
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 		
 		String nomeDecoded = URL.decodeParam(nome);
-		List<Integer> ids = URL.decodeIntList(categorias);
+		List<Integer> ids;
+		try {
+			ids = URL.decodeIntList(categorias);
+		} catch (Exception e) {
+			ids = new ArrayList<>();
+		}
 		final Page<Produto> list = produtoService.search(nomeDecoded, ids, page, linesPerPage, orderBy, direction);
 		Page<ProdutoDTO> listDTO = list.map(ProdutoDTO::new);
 		return ResponseEntity.ok(listDTO);
