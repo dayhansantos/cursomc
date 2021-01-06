@@ -1,24 +1,14 @@
 package br.com.dayhan.cursomc.domain;
 
-import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class Pedido implements Serializable {
     private static final long serialVersionUID = -5382998819212780618L;
 
@@ -43,6 +33,9 @@ public class Pedido implements Serializable {
     @OneToMany(mappedBy = "id.pedido", cascade = CascadeType.PERSIST)
     private Set<ItemPedido> itens = new HashSet<>();
 
+    public Pedido() {
+    }
+
     public Pedido(final Integer id, final Date instante, final Endereco enderecoDeEntrega) {
         this.id = id;
         this.instante = instante;
@@ -62,6 +55,67 @@ public class Pedido implements Serializable {
     		itemPedido.getId().setPedido(this);
     		this.itens.add(itemPedido);
 		}
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Date getInstante() {
+        return instante;
+    }
+
+    public void setInstante(Date instante) {
+        this.instante = instante;
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Endereco getEnderecoDeEntrega() {
+        return enderecoDeEntrega;
+    }
+
+    public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
+        this.enderecoDeEntrega = enderecoDeEntrega;
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pedido pedido = (Pedido) o;
+        return Objects.equals(id, pedido.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

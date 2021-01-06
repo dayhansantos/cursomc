@@ -2,9 +2,6 @@ package br.com.dayhan.cursomc.domain;
 
 import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
@@ -12,9 +9,6 @@ import javax.persistence.Entity;
  * PagamentoComCartao
  */
 @Entity
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 
@@ -22,9 +16,20 @@ public class PagamentoComCartao extends Pagamento {
 
     private Integer numeroDeParcelas;
 
+    public PagamentoComCartao() {
+    }
+
     public PagamentoComCartao(final Integer id, final EstadoPagamento estado, final Pedido pedido,
-            final Integer numeroDeParcelas) {
+                              final Integer numeroDeParcelas) {
         super(id, estado, pedido);
+        this.numeroDeParcelas = numeroDeParcelas;
+    }
+
+    public Integer getNumeroDeParcelas() {
+        return numeroDeParcelas;
+    }
+
+    public void setNumeroDeParcelas(Integer numeroDeParcelas) {
         this.numeroDeParcelas = numeroDeParcelas;
     }
 }

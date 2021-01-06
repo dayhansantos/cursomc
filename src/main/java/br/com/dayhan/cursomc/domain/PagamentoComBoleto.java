@@ -3,9 +3,6 @@ package br.com.dayhan.cursomc.domain;
 import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import java.util.Date;
@@ -14,9 +11,6 @@ import java.util.Date;
  * PagamentoComBoleto
  */
 @Entity
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @JsonTypeName("pagamentoComBoleto")
 public class PagamentoComBoleto extends Pagamento {
 
@@ -28,10 +22,29 @@ public class PagamentoComBoleto extends Pagamento {
 	@JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataPagamento;
 
+    public PagamentoComBoleto() {
+    }
+
     public PagamentoComBoleto(final Integer id, final EstadoPagamento estado, final Pedido pedido,
-            final Date dataVencimento, final Date dataPagamento) {
+                              final Date dataVencimento, final Date dataPagamento) {
         super(id, estado, pedido);
         this.dataVencimento = dataVencimento;
+        this.dataPagamento = dataPagamento;
+    }
+
+    public Date getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public void setDataVencimento(Date dataVencimento) {
+        this.dataVencimento = dataVencimento;
+    }
+
+    public Date getDataPagamento() {
+        return dataPagamento;
+    }
+
+    public void setDataPagamento(Date dataPagamento) {
         this.dataPagamento = dataPagamento;
     }
 }

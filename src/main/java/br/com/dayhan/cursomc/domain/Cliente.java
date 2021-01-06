@@ -2,18 +2,12 @@ package br.com.dayhan.cursomc.domain;
 
 import br.com.dayhan.cursomc.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(exclude = {"enderecos", "telefones", "pedidos"})
 public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -37,6 +31,9 @@ public class Cliente implements Serializable {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
 	@JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();
+
+    public Cliente() {
+    }
 
     public Cliente(final Integer id, final String nome, final String email, final String cpfCnpj, final TipoCliente tipo) {
     	this.id = id;
@@ -70,5 +67,78 @@ public class Cliente implements Serializable {
     
     public void addTelefone(String ...telefones) {
         Collections.addAll(this.telefones, telefones);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCpfCnpj() {
+        return cpfCnpj;
+    }
+
+    public void setCpfCnpj(String cpfCnpj) {
+        this.cpfCnpj = cpfCnpj;
+    }
+
+    public void setTipo(Integer tipo) {
+        this.tipo = tipo;
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+
+    public Set<String> getTelefones() {
+        return telefones;
+    }
+
+    public void setTelefones(Set<String> telefones) {
+        this.telefones = telefones;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(id, cliente.id) && Objects.equals(nome, cliente.nome) && Objects.equals(email, cliente.email) && Objects.equals(cpfCnpj, cliente.cpfCnpj) && Objects.equals(tipo, cliente.tipo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, email, cpfCnpj, tipo);
     }
 }

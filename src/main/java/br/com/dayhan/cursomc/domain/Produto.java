@@ -1,21 +1,12 @@
 package br.com.dayhan.cursomc.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class Produto implements Serializable {
 
     private static final long serialVersionUID = 4446285086533085607L;
@@ -34,6 +25,9 @@ public class Produto implements Serializable {
     @OneToMany(mappedBy = "id.produto", cascade = CascadeType.PERSIST)
 	@JsonIgnore
     private Set<ItemPedido> itens = new HashSet<>();
+
+    public Produto() {
+    }
 
     public Produto(String nome, Double preco) {
         this.nome = nome;
@@ -54,5 +48,58 @@ public class Produto implements Serializable {
     		itemPedido.getId().setProduto(this);
     		this.itens.add(itemPedido);
 		}
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(Double preco) {
+        this.preco = preco;
+    }
+
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
+    }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Produto produto = (Produto) o;
+        return id.equals(produto.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
