@@ -1,11 +1,13 @@
 package br.com.dayhan.cursomc.domain;
 
+import br.com.dayhan.cursomc.domain.enums.Perfil;
 import br.com.dayhan.cursomc.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cliente implements Serializable {
@@ -30,14 +32,20 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "TELEFONE")
     private Set<String> telefones = new HashSet<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PERFIS")
+    private final Set<Integer> perfis = new HashSet<>();
+
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
 	@JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();
 
     public Cliente() {
+        addPerfil(Perfil.CLIENTE);
     }
 
     public Cliente(final Integer id, final String nome, final String email, final String cpfCnpj, final TipoCliente tipo, String senha) {
+        this();
     	this.id = id;
         this.nome = nome;
         this.email = email;
@@ -152,5 +160,14 @@ public class Cliente implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, nome, email, cpfCnpj, tipo);
+    }
+
+    public Set<Perfil> getPerfis() {
+        return this.perfis.stream().map(Perfil::toEnum)
+                .collect(Collectors.toSet());
+    }
+
+    public void addPerfil(Perfil perfil) {
+        this.perfis.add(perfil.getCod());
     }
 }

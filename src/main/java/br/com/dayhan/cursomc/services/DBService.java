@@ -2,6 +2,7 @@ package br.com.dayhan.cursomc.services;
 
 import br.com.dayhan.cursomc.domain.*;
 import br.com.dayhan.cursomc.domain.enums.EstadoPagamento;
+import br.com.dayhan.cursomc.domain.enums.Perfil;
 import br.com.dayhan.cursomc.domain.enums.TipoCliente;
 import br.com.dayhan.cursomc.repositories.CategoriaRepository;
 import br.com.dayhan.cursomc.repositories.ClienteRepository;
@@ -81,12 +82,19 @@ public class DBService {
 
         var cli1 = new Cliente(null, "Dayhan Henrique", "dayhantest@gmail.com", "36378912377", TipoCliente.PF, bCryptPasswordEncoder.encode("1234"));
         cli1.addTelefone("123456789", "1122334455");
+        
+        var cli2 = new Cliente(null, "Admin", "admin@gmail.com", "03970759013", TipoCliente.PF, bCryptPasswordEncoder.encode("4321"));
+        cli2.addPerfil(Perfil.ADMIN);
+        cli2.addTelefone("46513216", "56463214");
 
         var e1 = new Endereco("Rua flores", "300", "Apt 303", "Jardim", "234234234", c1);
         var e2 = new Endereco("Avenida Matos", "105", "Sala 800", "Centro", "213123123", c2);
+        var e3 = new Endereco("Rua fulano de tal", "1234", null, "Centro", "455521", c2);
         cli1.addEndereco(e1, e2);
+        cli2.addEndereco(e3);
 
         clienteRepository.save(cli1);
+        clienteRepository.save(cli2);
 
         var sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         var ped1 = new Pedido(null, sdf.parse("10/09/2017 10:32"), e1);
