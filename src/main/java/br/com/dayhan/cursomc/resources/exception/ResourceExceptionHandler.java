@@ -1,5 +1,6 @@
 package br.com.dayhan.cursomc.resources.exception;
 
+import br.com.dayhan.cursomc.exception.AuthorizationException;
 import br.com.dayhan.cursomc.exception.DataIntegrityException;
 import br.com.dayhan.cursomc.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -39,8 +40,8 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<StandardError> authorization(AccessDeniedException e, HttpServletRequest request) {
+    @ExceptionHandler({AccessDeniedException.class, AuthorizationException.class})
+    public ResponseEntity<StandardError> authorization(Exception e, HttpServletRequest request) {
 
         StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), "Acesso negado", System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);

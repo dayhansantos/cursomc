@@ -3,12 +3,15 @@ package br.com.dayhan.cursomc.services;
 import br.com.dayhan.cursomc.domain.Cidade;
 import br.com.dayhan.cursomc.domain.Cliente;
 import br.com.dayhan.cursomc.domain.Endereco;
+import br.com.dayhan.cursomc.domain.enums.Perfil;
 import br.com.dayhan.cursomc.domain.enums.TipoCliente;
 import br.com.dayhan.cursomc.dto.ClienteDTO;
 import br.com.dayhan.cursomc.dto.ClienteNewDTO;
+import br.com.dayhan.cursomc.exception.AuthorizationException;
 import br.com.dayhan.cursomc.exception.DataIntegrityException;
 import br.com.dayhan.cursomc.exception.NotFoundException;
 import br.com.dayhan.cursomc.repositories.ClienteRepository;
+import br.com.dayhan.cursomc.security.UserSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -31,6 +34,12 @@ public class ClienteService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public Cliente find(Integer id) {
+
+		UserSecurity user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
 		return clienteRepository.findById(id).orElseThrow(
 				() -> new NotFoundException(
 						"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getSimpleName()));
