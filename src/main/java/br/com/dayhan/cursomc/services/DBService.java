@@ -8,6 +8,7 @@ import br.com.dayhan.cursomc.repositories.ClienteRepository;
 import br.com.dayhan.cursomc.repositories.EstadoRepository;
 import br.com.dayhan.cursomc.repositories.PagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -20,17 +21,20 @@ public class DBService {
     private EstadoRepository estadoRepository;
     private ClienteRepository clienteRepository;
     private PagamentoRepository pagamentoRepository;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public DBService(
             CategoriaRepository categoriaRepository,
             EstadoRepository estadoRepository,
             ClienteRepository clienteRepository,
-            PagamentoRepository pagamentoRepository) {
+            PagamentoRepository pagamentoRepository,
+            BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.categoriaRepository = categoriaRepository;
         this.estadoRepository = estadoRepository;
         this.clienteRepository = clienteRepository;
         this.pagamentoRepository = pagamentoRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
     public List<Pagamento> instantiateDatabase() throws Exception {
         final var cat1 = new Categoria("Informática");
@@ -75,7 +79,7 @@ public class DBService {
 
         estadoRepository.saveAll(Arrays.asList(est1, est2));
 
-        var cli1 = new Cliente(null, "Dayhan Henrique", "dayhantest@gmail.com", "36378912377", TipoCliente.PF);
+        var cli1 = new Cliente(null, "Dayhan Henrique", "dayhantest@gmail.com", "36378912377", TipoCliente.PF, bCryptPasswordEncoder.encode("1234"));
         cli1.addTelefone("123456789", "1122334455");
 
         var e1 = new Endereco("Rua flores", "300", "Apt 303", "Jardim", "234234234", c1);
